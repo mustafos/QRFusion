@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A5B80EE2E33840100E6DBAC /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 6A5B80ED2E33840100E6DBAC /* CasePaths */; };
+		6A5B80F02E33840100E6DBAC /* CasePathsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6A5B80EF2E33840100E6DBAC /* CasePathsCore */; };
 		6A6819402E294A0700C102C5 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 6A68193F2E294A0700C102C5 /* ComposableArchitecture */; };
 		6A6819772E2A15DB00C102C5 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 6A6819762E2A15DB00C102C5 /* CodeScanner */; };
 /* End PBXBuildFile section */
@@ -43,6 +45,8 @@
 			files = (
 				6A6819772E2A15DB00C102C5 /* CodeScanner in Frameworks */,
 				6A6819402E294A0700C102C5 /* ComposableArchitecture in Frameworks */,
+				6A5B80F02E33840100E6DBAC /* CasePathsCore in Frameworks */,
+				6A5B80EE2E33840100E6DBAC /* CasePaths in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +91,8 @@
 			packageProductDependencies = (
 				6A68193F2E294A0700C102C5 /* ComposableArchitecture */,
 				6A6819762E2A15DB00C102C5 /* CodeScanner */,
+				6A5B80ED2E33840100E6DBAC /* CasePaths */,
+				6A5B80EF2E33840100E6DBAC /* CasePathsCore */,
 			);
 			productName = ScannerApp;
 			productReference = 6A6819262E2945D500C102C5 /* ScannerApp.app */;
@@ -119,6 +125,7 @@
 			packageReferences = (
 				6A68193E2E294A0700C102C5 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				6A6819752E2A15DB00C102C5 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+				6A5B80EC2E33840100E6DBAC /* XCRemoteSwiftPackageReference "swift-case-paths" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6A6819272E2945D500C102C5 /* Products */;
@@ -368,6 +375,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6A5B80EC2E33840100E6DBAC /* XCRemoteSwiftPackageReference "swift-case-paths" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-case-paths";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.1;
+			};
+		};
 		6A68193E2E294A0700C102C5 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -387,6 +402,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6A5B80ED2E33840100E6DBAC /* CasePaths */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A5B80EC2E33840100E6DBAC /* XCRemoteSwiftPackageReference "swift-case-paths" */;
+			productName = CasePaths;
+		};
+		6A5B80EF2E33840100E6DBAC /* CasePathsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A5B80EC2E33840100E6DBAC /* XCRemoteSwiftPackageReference "swift-case-paths" */;
+			productName = CasePathsCore;
+		};
 		6A68193F2E294A0700C102C5 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6A68193E2E294A0700C102C5 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
