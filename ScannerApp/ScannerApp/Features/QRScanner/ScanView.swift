@@ -29,32 +29,6 @@ struct ScanView: View {
                 Color.black.ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // MARK: - Header
-                    HStack {
-                        Button {
-                            // mock button
-                        } label: {
-                            Image("empty").frame(width: 24, height: 24)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("Scan QR")
-                            .customText(size: 16)
-                        
-                        Spacer()
-                        
-                        Button {
-                            // close action
-                        } label: {
-                            Image(.close)
-                        }
-                    }
-                    .padding(.horizontal, padding)
-                    .padding(.top, 12)
-                    
-//                    Spacer()
-                    
                     // MARK: - Scanner
                     if showScanner {
                         ZStack {
@@ -72,14 +46,9 @@ struct ScanView: View {
                                     print("Scanning failed: \(error)")
                                 }
                             }
-//                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .ignoresSafeArea()
-                            
-//                            Image("frame")
-                        }//.padding(.top, 100)
+                        }
                     }
-                    
-//                    Spacer()
                     
                     // MARK: - Bottom controls
                     HStack(spacing: 40) {
@@ -153,8 +122,8 @@ struct ScanView: View {
                     }
                 }
                 .padding(.horizontal, 8)
-//                .presentationBackground(.ultraThinMaterial)
-//                .presentationCornerRadius(24)
+                //                .presentationBackground(.ultraThinMaterial)
+                //                .presentationCornerRadius(24)
                 .presentationDragIndicator(.visible)
                 .presentationDetents([.medium])
             }

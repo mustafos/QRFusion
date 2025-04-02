@@ -27,12 +27,12 @@ struct ScanFeature: Reducer {
                 state.scannedAddress = address
                 state.showAlert = true
                 return .none
-
+                
             case .alertDismissed:
                 state.showAlert = false
                 state.scannedAddress = nil
                 return .none
-
+                
             case .showMyCode:
                 return .none
             }

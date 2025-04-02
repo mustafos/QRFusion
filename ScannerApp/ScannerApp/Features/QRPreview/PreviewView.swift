@@ -20,51 +20,9 @@ struct PreviewView: View {
                 Color.black.ignoresSafeArea()
                 
                 VStack(spacing: 24) {
-                    // MARK: - Header
-                    HStack {
-                        ShareLink(
-                            items: [viewStore.myAddress],
-                            subject: Text("My Wallet Address"),
-                            message: Text("Send funds to this address via Alien App")
-                        ) {
-                            Image(.share)
-                        }
-
-                        Spacer()
-
-                        ZStack {
-                            Text("Receive")
-                                .customText(size: 16)
-
-                            if viewStore.isCopied {
-                                HStack(spacing: 4) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                    Text("Address copied").customText()
-                                }
-                                .foregroundStyle(Color.accent, Color.white)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Color.blue)
-                                .clipShape(Capsule())
-                                .transition(.opacity)
-                            }
-                        }
-                        .frame(height: 36)
-                        .animation(.easeInOut, value: viewStore.isCopied)
-
-                        Spacer()
-
-                        Button {
-                            // close action
-                        } label: {
-                            Image(.close)
-                        }
-                    }
-                    .padding(.horizontal, padding)
-                    .padding(.top, 12)
                     
                     Spacer(minLength: 16)
-
+                    
                     // MARK: - Handle
                     Text("@mustafosID")
                         .font(.title2.weight(.semibold))
@@ -82,7 +40,7 @@ struct PreviewView: View {
                                 .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                         )
                         .cornerRadius(48)
-
+                    
                     // MARK: - Info
                     VStack(spacing: 4) {
                         Image(.coins)
@@ -91,7 +49,7 @@ struct PreviewView: View {
                         Text("To send, use Alien or Solana network only")
                             .customText(size: 12, color: .gray)
                     }
-
+                    
                     // MARK: - Address
                     CopyAddressView(address: viewStore.myAddress) {
                         viewStore.send(.copyTapped)
