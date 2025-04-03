@@ -13,27 +13,52 @@ struct AppView: View {
     private var headerHeight: CGFloat { 48 }
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(spacing: 0) {
-                header(for: viewStore)
-                
-                Group {
-                    switch viewStore.selectedTab {
-                    case .scan:
-                        ScanView(store: store.scope(state: \.scan, action: \.scan))
-                    case .preview:
-                        PreviewView(store: store.scope(state: \.preview, action: \.preview))
+            ZStack {
+                VStack(spacing: 0) {
+//                    Color.clear.frame(height: 48) // резервация места
+                    Group {
+                        switch viewStore.selectedTab {
+                        case .scan:
+                            ScanView(store: store.scope(state: \.scan, action: \.scan))
+                        case .preview:
+                            PreviewView(store: store.scope(state: \.preview, action: \.preview))
+                        }
                     }
+                    CapsuleTabBar(selectedTab: viewStore.binding(
+                        get: \.selectedTab,
+                        send: AppFeature.Action.setTab
+                    ))
+                    .padding(.bottom, 20)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                CapsuleTabBar(selectedTab: viewStore.binding(
-                    get: \.selectedTab,
-                    send: AppFeature.Action.setTab
-                ))
-                .padding(.bottom, 20)
+
+                VStack(spacing: 0) {
+                    header(for: viewStore)
+                    Spacer()
+                }.padding(.top, 20)
             }
-            .background(Color.black)
-            .ignoresSafeArea(edges: .bottom)
+            .ignoresSafeArea()
+
+//            VStack(spacing: 0) {
+//                header(for: viewStore)
+//                
+//                Group {
+//                    switch viewStore.selectedTab {
+//                    case .scan:
+//                        ScanView(store: store.scope(state: \.scan, action: \.scan))
+//                    case .preview:
+//                        PreviewView(store: store.scope(state: \.preview, action: \.preview))
+//                    }
+//                }
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                
+//                CapsuleTabBar(selectedTab: viewStore.binding(
+//                    get: \.selectedTab,
+//                    send: AppFeature.Action.setTab
+//                ))
+//                .padding(.bottom, 20)
+//            }
+////            .background(Color.black)
+//            .ignoresSafeArea(edges: .bottom)
         }
     }
     
@@ -61,7 +86,6 @@ struct AppView: View {
     @ViewBuilder
     private func scanHeader() -> some View {
         HStack {
-            // Заглушка вместо кнопки (аналогична .share по ширине)
             Color.clear
                 .frame(width: 24, height: 24)
             
@@ -128,6 +152,4 @@ struct AppView: View {
             }
         }
     }
-    
-    
 }

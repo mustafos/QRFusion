@@ -1,56 +1,24 @@
-//
-//  ScanView.swift
-//  ScannerApp
-//
-//  Created by Mustafa Bekirov on 17.07.2025.
-//
-
 import SwiftUI
-import CodeScanner
 import ComposableArchitecture
 import AVFoundation
 import PhotosUI
-import Vision
 
 struct ScanView: View {
     let store: StoreOf<ScanFeature>
-    
+
     @EnvironmentObject var shake: ShakeMotionNotifier
+    @EnvironmentObject var camera: CameraService
     @State private var isGalleryPresented = false
-    @State private var isTorchOn = false
-    @State private var showScanner = true
     @State private var selectedItem: PhotosPickerItem?
-    
-    private let padding: CGFloat = 20
-    
+
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
-                Color.black.ignoresSafeArea()
-                
                 VStack(spacing: 0) {
-                    // MARK: - Scanner
-                    if showScanner {
-                        ZStack {
-                            CodeScannerView(
-                                codeTypes: [.qr],
-                                showViewfinder: true,
-                                simulatedData: "0xDEADBEEF1234567890",
-                                isTorchOn: isTorchOn
-                            ) { result in
-                                switch result {
-                                case .success(let res):
-                                    viewStore.send(.scanned(res.string))
-                                    showScanner = false
-                                case .failure(let error):
-                                    print("Scanning failed: \(error)")
-                                }
-                            }
-                            .ignoresSafeArea()
-                        }
-                    }
-                    
-                    // MARK: - Bottom controls
+                    CameraPreviewView(session: camera.session) { layer in
+                        camera.previewLayer = layer
+                    }.ignoresSafeArea()
+
                     HStack(spacing: 40) {
                         Button {
                             isGalleryPresented = true
@@ -63,11 +31,14 @@ struct ScanView: View {
                                     .customText(size: 12)
                             }
                         }
-                        
-                        Divider().frame(height: 36)
-                        
+
+                        Divider()
+                            .frame(width: 1, height: 36)
+                            .background(Color.white)
+                            .opacity(0.8)
+
                         Button {
-                            toggleTorch()
+                            camera.toggleTorch()
                         } label: {
                             VStack {
                                 Image(systemName: "flashlight.on.fill")
@@ -80,16 +51,16 @@ struct ScanView: View {
                     }
                     .padding(.bottom, 40)
                 }
+
+                ViewfinderOverlay()
             }
             .photosPicker(isPresented: $isGalleryPresented, selection: $selectedItem)
             .onChange(of: selectedItem) { newItem in
                 guard let item = newItem else { return }
                 Task {
                     if let data = try? await item.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data),
-                       let address = await scanQRCode(from: image) {
-                        viewStore.send(.scanned(address))
-                        showScanner = false
+                       let image = UIImage(data: data) {
+                        viewStore.send(.scanImage(image))
                     }
                 }
             }
@@ -98,8 +69,12 @@ struct ScanView: View {
                 viewStore.send(.scanned("8TZLxqVmNf3p9zAYnbtQgXpABC123XYZ"))
                 shake.didShake = false
             }
+            .onReceive(camera.$scannedCode.compactMap { $0 }) { code in
+                viewStore.send(.scanned(code))
+                camera.scannedCode = nil
+            }
             .sheet(isPresented: viewStore.binding(
-                get: \.showAlert,
+                get: \ .showAlert,
                 send: .alertDismissed
             )) {
                 VStack(spacing: 16) {
@@ -107,58 +82,34 @@ struct ScanView: View {
                         .customText(size: 24)
                     Text("We don’t know who is the owner. Please, make sure that address is correct and proceed with caution")
                         .customText(color: .gray)
-                    
-                    CopyAddressView(address: "8TZLxqVmNf3p9zAYnbtQgXpABC123XYZ", needsCopy: false) { }
-                    
+
+                    CopyAddressView(address: viewStore.scannedAddress ?? "", needsCopy: false) { }
+
                     Button {
                         viewStore.send(.alertDismissed)
+                        viewStore.send(.updateCamera(true))
                     } label: {
-                        Text("I understand")
-                            .customButton()
+                        Text("I understand").customButton()
                     }
-                    
+
                     Button("Close") {
                         viewStore.send(.alertDismissed)
+                        viewStore.send(.updateCamera(true))
                     }
                 }
                 .padding(.horizontal, 8)
-                //                .presentationBackground(.ultraThinMaterial)
-                //                .presentationCornerRadius(24)
                 .presentationDragIndicator(.visible)
                 .presentationDetents([.medium])
-            }
-        }
-    }
-    
-    private func toggleTorch() {
-        guard let device = AVCaptureDevice.default(for: .video),
-              device.hasTorch else { return }
-        
-        try? device.lockForConfiguration()
-        isTorchOn.toggle()
-        device.torchMode = isTorchOn ? .on : .off
-        device.unlockForConfiguration()
-    }
-    
-    private func scanQRCode(from image: UIImage) async -> String? {
-        guard let cgImage = image.cgImage else { return nil }
-        
-        return await withCheckedContinuation { continuation in
-            let request = VNDetectBarcodesRequest { request, error in
-                guard error == nil else {
-                    continuation.resume(returning: nil)
-                    return
+                .onAppear {
+                    viewStore.send(.updateCamera(false))
                 }
-                
-                let result = request.results?.first as? VNBarcodeObservation
-                continuation.resume(returning: result?.payloadStringValue)
             }
-            
-            let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-            do {
-                try handler.perform([request])
-            } catch {
-                continuation.resume(returning: nil)
+            .task {
+                if viewStore.isCameraActive && !camera.session.isRunning {
+                    camera.startSessionIfNeeded()
+                } else if !viewStore.isCameraActive && camera.session.isRunning {
+                    camera.stopSessionIfNeeded()
+                }
             }
         }
     }
