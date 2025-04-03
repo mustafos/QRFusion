@@ -13,22 +13,22 @@ struct CopyAddressView: View {
     let onCopy: () -> Void
     
     var body: some View {
-        HStack(spacing: 8) {
-            Text(shortenAddress(address))
-                .customText()
-                .lineLimit(1)
-                .truncationMode(.middle)
-                .multilineTextAlignment(.center)
-            if needsCopy {
-                Button(action: onCopy) {
+        Button(action: onCopy) {
+            HStack(spacing: 8) {
+                Text(shortenAddress(address))
+                    .customText()
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                    .multilineTextAlignment(.center)
+                if needsCopy {
                     Image(.copy).frame(width: 16, height: 16)
                 }
             }
-        }
-        .frame(height: 40)
-        .padding(.horizontal, 12)
-        .background(Color.white.opacity(0.12))
-        .clipShape(Capsule())
+            .frame(height: 40)
+            .padding(.horizontal, 12)
+            .background(Color.white.opacity(0.12))
+            .clipShape(Capsule())
+        }.disabled(!needsCopy)
     }
     
     private func shortenAddress(_ address: String) -> String {

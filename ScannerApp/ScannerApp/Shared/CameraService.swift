@@ -7,7 +7,6 @@
 
 import AVFoundation
 
-@MainActor
 final class CameraService: NSObject, ObservableObject, AVCaptureMetadataOutputObjectsDelegate {
     let session = AVCaptureSession()
     @Published var scannedCode: String?

@@ -10,7 +10,6 @@
 		6A5B80EE2E33840100E6DBAC /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 6A5B80ED2E33840100E6DBAC /* CasePaths */; };
 		6A5B80F02E33840100E6DBAC /* CasePathsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6A5B80EF2E33840100E6DBAC /* CasePathsCore */; };
 		6A6819402E294A0700C102C5 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 6A68193F2E294A0700C102C5 /* ComposableArchitecture */; };
-		6A6819772E2A15DB00C102C5 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 6A6819762E2A15DB00C102C5 /* CodeScanner */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +42,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A6819772E2A15DB00C102C5 /* CodeScanner in Frameworks */,
 				6A6819402E294A0700C102C5 /* ComposableArchitecture in Frameworks */,
 				6A5B80F02E33840100E6DBAC /* CasePathsCore in Frameworks */,
 				6A5B80EE2E33840100E6DBAC /* CasePaths in Frameworks */,
@@ -90,7 +88,6 @@
 			name = ScannerApp;
 			packageProductDependencies = (
 				6A68193F2E294A0700C102C5 /* ComposableArchitecture */,
-				6A6819762E2A15DB00C102C5 /* CodeScanner */,
 				6A5B80ED2E33840100E6DBAC /* CasePaths */,
 				6A5B80EF2E33840100E6DBAC /* CasePathsCore */,
 			);
@@ -124,7 +121,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6A68193E2E294A0700C102C5 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				6A6819752E2A15DB00C102C5 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6A5B80EC2E33840100E6DBAC /* XCRemoteSwiftPackageReference "swift-case-paths" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -391,14 +387,6 @@
 				minimumVersion = 1.20.2;
 			};
 		};
-		6A6819752E2A15DB00C102C5 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/twostraws/CodeScanner.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -416,11 +404,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6A68193E2E294A0700C102C5 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		6A6819762E2A15DB00C102C5 /* CodeScanner */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6A6819752E2A15DB00C102C5 /* XCRemoteSwiftPackageReference "CodeScanner" */;
-			productName = CodeScanner;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

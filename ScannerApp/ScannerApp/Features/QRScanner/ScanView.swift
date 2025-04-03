@@ -5,12 +5,12 @@ import PhotosUI
 
 struct ScanView: View {
     let store: StoreOf<ScanFeature>
-
+    
     @EnvironmentObject var shake: ShakeMotionNotifier
-    @EnvironmentObject var camera: CameraService
+    @StateObject private var camera = CameraService()
     @State private var isGalleryPresented = false
     @State private var selectedItem: PhotosPickerItem?
-
+    
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
@@ -18,7 +18,7 @@ struct ScanView: View {
                     CameraPreviewView(session: camera.session) { layer in
                         camera.previewLayer = layer
                     }.ignoresSafeArea()
-
+                    
                     HStack(spacing: 40) {
                         Button {
                             isGalleryPresented = true
@@ -31,12 +31,12 @@ struct ScanView: View {
                                     .customText(size: 12)
                             }
                         }
-
+                        
                         Divider()
                             .frame(width: 1, height: 36)
                             .background(Color.white)
                             .opacity(0.8)
-
+                        
                         Button {
                             camera.toggleTorch()
                         } label: {
@@ -51,7 +51,7 @@ struct ScanView: View {
                     }
                     .padding(.bottom, 40)
                 }
-
+                
                 ViewfinderOverlay()
             }
             .photosPicker(isPresented: $isGalleryPresented, selection: $selectedItem)
@@ -82,16 +82,16 @@ struct ScanView: View {
                         .customText(size: 24)
                     Text("We don’t know who is the owner. Please, make sure that address is correct and proceed with caution")
                         .customText(color: .gray)
-
+                    
                     CopyAddressView(address: viewStore.scannedAddress ?? "", needsCopy: false) { }
-
+                    
                     Button {
                         viewStore.send(.alertDismissed)
                         viewStore.send(.updateCamera(true))
                     } label: {
                         Text("I understand").customButton()
                     }
-
+                    
                     Button("Close") {
                         viewStore.send(.alertDismissed)
                         viewStore.send(.updateCamera(true))
