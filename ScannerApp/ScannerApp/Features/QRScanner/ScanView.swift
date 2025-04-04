@@ -1,6 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
-import AVFoundation
+//import AVFoundation
 import PhotosUI
 
 struct ScanView: View {

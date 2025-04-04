@@ -31,15 +31,16 @@ struct PreviewView: View {
                         )
                     
                     // MARK: - QR Image
-                    Image("camera_mock")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 240, height: 240)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 48)
-                                .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                        )
-                        .cornerRadius(48)
+//                    Image("camera_mock")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 240, height: 240)
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 48)
+//                                .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+//                        )
+//                        .cornerRadius(48)
+                    QRCodeImageView(address: viewStore.myAddress)
                     
                     // MARK: - Info
                     VStack(spacing: 4) {
