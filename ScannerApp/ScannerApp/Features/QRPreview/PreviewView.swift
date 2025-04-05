@@ -11,7 +11,7 @@ import CoreImage.CIFilterBuiltins
 
 struct PreviewView: View {
     let store: StoreOf<PreviewFeature>
-    
+    @Binding var qrImageToShare: UIImage?
     private let padding: CGFloat = 20
     
     var body: some View {
@@ -31,16 +31,14 @@ struct PreviewView: View {
                         )
                     
                     // MARK: - QR Image
-//                    Image("camera_mock")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 240, height: 240)
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: 48)
-//                                .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-//                        )
-//                        .cornerRadius(48)
-                    QRCodeImageView(address: viewStore.myAddress)
+                    QRCodeImageView(
+                        address: viewStore.myAddress,
+                        color: .white,
+                        logo: UIImage(named: "camera_mock"),
+                        onImageGenerated: { image in
+                            qrImageToShare = image
+                        }
+                    )
                     
                     // MARK: - Info
                     VStack(spacing: 4) {

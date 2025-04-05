@@ -10,18 +10,21 @@ import ComposableArchitecture
 
 struct AppView: View {
     let store: StoreOf<AppFeature>
+    @State private var qrImageToShare: UIImage? = nil
     private var headerHeight: CGFloat { 48 }
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
                 VStack(spacing: 0) {
-//                    Color.clear.frame(height: 48) // резервация места
                     Group {
                         switch viewStore.selectedTab {
                         case .scan:
                             ScanView(store: store.scope(state: \.scan, action: \.scan))
                         case .preview:
-                            PreviewView(store: store.scope(state: \.preview, action: \.preview))
+                            PreviewView(
+                                store: store.scope(state: \.preview, action: \.preview),
+                                qrImageToShare: $qrImageToShare
+                            )
                         }
                     }
                     CapsuleTabBar(selectedTab: viewStore.binding(
@@ -30,35 +33,12 @@ struct AppView: View {
                     ))
                     .padding(.bottom, 20)
                 }
-
+                
                 VStack(spacing: 0) {
                     header(for: viewStore)
                     Spacer()
                 }.padding(.top, 20)
-            }
-            .ignoresSafeArea()
-
-//            VStack(spacing: 0) {
-//                header(for: viewStore)
-//                
-//                Group {
-//                    switch viewStore.selectedTab {
-//                    case .scan:
-//                        ScanView(store: store.scope(state: \.scan, action: \.scan))
-//                    case .preview:
-//                        PreviewView(store: store.scope(state: \.preview, action: \.preview))
-//                    }
-//                }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                
-//                CapsuleTabBar(selectedTab: viewStore.binding(
-//                    get: \.selectedTab,
-//                    send: AppFeature.Action.setTab
-//                ))
-//                .padding(.bottom, 20)
-//            }
-////            .background(Color.black)
-//            .ignoresSafeArea(edges: .bottom)
+            }.ignoresSafeArea()
         }
     }
     
@@ -111,14 +91,18 @@ struct AppView: View {
             observe: { $0 }
         ) { previewStore in
             HStack {
-                ShareLink(
-                    items: [previewStore.myAddress],
-                    subject: Text("My Wallet Address"),
-                    message: Text("Send funds to this address via Alien App")
-                ) {
+                if let image = qrImageToShare {
+                    ShareLink(
+                        item: Image(uiImage: image),
+                        preview: SharePreview("My Wallet Address", image: Image(uiImage: image))
+                    ) {
+                        Image(.share)
+                    }
+                    .frame(width: 24, height: 24)
+                } else {
                     Image(.share)
+                        .frame(width: 24, height: 24)
                 }
-                .frame(width: 24, height: 24)
                 
                 Spacer()
                 
