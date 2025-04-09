@@ -77,7 +77,7 @@ struct ScanView: View {
                 send: .alertDismissed
             )) {
                 VStack(spacing: 16) {
-                    Text("This address is outside of Alien App")
+                    Text("This address is outside of QRFusion")
                         .customText(size: 24)
                     Text("We don’t know who is the owner. Please, make sure that address is correct and proceed with caution")
                         .customText(color: .gray)
@@ -103,10 +103,10 @@ struct ScanView: View {
                     viewStore.send(.updateCamera(false))
                 }
             }
-            .task {
-                if viewStore.isCameraActive && !camera.session.isRunning {
+            .task(id: viewStore.isCameraActive) {
+                if viewStore.isCameraActive {
                     camera.startSessionIfNeeded()
-                } else if !viewStore.isCameraActive && camera.session.isRunning {
+                } else {
                     camera.stopSessionIfNeeded()
                 }
             }

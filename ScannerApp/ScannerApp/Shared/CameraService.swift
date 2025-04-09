@@ -24,6 +24,7 @@ final class CameraService: NSObject, ObservableObject, AVCaptureMetadataOutputOb
     
     private func configure() {
         session.beginConfiguration()
+        defer { session.commitConfiguration() }
         
         guard let device = AVCaptureDevice.default(for: .video),
               let input = try? AVCaptureDeviceInput(device: device),
@@ -39,15 +40,16 @@ final class CameraService: NSObject, ObservableObject, AVCaptureMetadataOutputOb
             metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             metadataOutput.metadataObjectTypes = [.qr]
         }
-        
-        session.commitConfiguration()
     }
     
     func startSessionIfNeeded() {
         guard !isSessionRunning else { return }
         isSessionRunning = true
+        
         DispatchQueue.global(qos: .userInitiated).async {
-            self.session.startRunning()
+            if !self.session.isRunning {
+                self.session.startRunning()
+            }
         }
     }
     

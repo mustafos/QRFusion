@@ -37,8 +37,8 @@ struct AppView: View {
                 VStack(spacing: 0) {
                     header(for: viewStore)
                     Spacer()
-                }.padding(.top, 20)
-            }.ignoresSafeArea()
+                }
+            }.edgesIgnoringSafeArea(.bottom)
         }
     }
     

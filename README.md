@@ -3,7 +3,7 @@
 **QRFusion** is a modern QR code scanning and sharing app built with **SwiftUI** and **The Composable Architecture (TCA)**. It offers a seamless experience for scanning QR codes via camera, extracting them from the gallery, and displaying your own wallet address as a custom-branded QR code.
 
 <p align="center">
-<a href="https://github.com/mustafos/QRFusion.git" target="_blank"><img src="Assets/preview.png" title="QRFusion"></a>
+<a href="https://github.com/mustafos/QRFusion.git" target="_blank"><img src="Assets/fusion_banner.gif" title="QRFusion"></a>
 <i>📷 Live camera scan · 🖼 Gallery import · 🎨 Custom QR with logo · 📤 Share & copy · ⚙️ Built with TCA</i>
 </p>
 
@@ -52,7 +52,7 @@ AppFeature
 ## 🧪 Tech Stack
 
 - Swift 5.9+
-- iOS 17+
+- iOS 16+
 - Xcode 15+
 - SwiftUI
 - ComposableArchitecture
